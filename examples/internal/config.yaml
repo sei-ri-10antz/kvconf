@@ -1,0 +1,41 @@
+database:
+  dialect: mysql
+  host: 127.0.0.1
+  port: 3306
+  user: root
+  password: password
+  name: shakelive
+  option: ?charset=utf8mb4&parseTime=True&loc=Asia%2FTokyo
+  max_idle_conns: 10
+  max_open_conns: 10000
+  logging: true
+
+redis:
+  host: 127.0.0.1
+  port: 6379
+  db: 0
+
+nats:
+  default:
+    url: nats://127.0.0.4222
+  shake:
+    url: nats://127.0.0.4222
+
+agora:
+  app_id: xxx
+  app_certificate: xxx
+  access_key_id: xxx
+  secret_access_key: xxx
+
+aws:
+  access_key_id: xxx
+  secret_access_key: xxx
+  s3:
+    bucket: xxx
+
+nexmo:
+  api_key: xxx
+  api_secret: xxx
+
+sendgrid:
+  api_key: xxx

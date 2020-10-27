@@ -1,0 +1,78 @@
+version: "3.1"
+
+services:
+  consul:
+    image: consul:latest
+    container_name: consul
+    user : root
+    command:
+      consul agent
+      -server
+      -ui
+      -data-dir=/data
+      -bootstrap-expect=1
+      -client=0.0.0.0
+      -disable-host-node-id
+    hostname: consul
+    ports:
+      - 8500:8500
+    volumes:
+      - ./data/consul:/data
+    networks:
+      - sandbox-net
+
+  etcd:
+    image: quay.io/coreos/etcd:latest
+    container_name: etcd
+    command:
+      etcd
+      -name etcd
+      -data-dir /etcd-data
+      -advertise-client-urls http://0.0.0.0:2379
+      -listen-client-urls http://0.0.0.0:2379
+      -listen-peer-urls http://0.0.0.0:2380
+      -initial-cluster-token etcd-cluster
+      -initial-cluster "etcd=http://etcd:2380"
+      -initial-cluster-state new
+    environment:
+      - ETCDCTL_API=3
+    ports:
+      - "2379:2379"
+      - "2380:2380"
+    volumes:
+      - ./data/etcd:/etcd-data
+    networks:
+      - sandbox-net
+
+  # redis:
+  #   image: redis:3.2
+  #   container_name: redis
+  #   ports:
+  #     - 6379:6379
+  #   volumes:
+  #     - ./data/redis:/data
+  #   networks:
+  #     - sandbox-net
+
+  # mysql:
+  #   image: mysql:5.7
+  #   container_name: mysql
+  #   environment:
+  #     MYSQL_ROOT_PASSWORD: sa
+  #     MYSQL_DATABASE: sandbox
+  #     MYSQL_USER: develop
+  #     MYSQL_PASSWORD: develop
+  #   command:
+  #     mysqld
+  #     --character-set-server=utf8mb4
+  #     --collation-server=utf8mb4_unicode_ci
+  #   volumes:
+  #     - ./data/mysql/:/var/www
+  #   ports:
+  #     - 3306:3306
+  #   networks:
+  #     - sandbox-net
+
+networks:
+  sandbox-net:
+    external: true
